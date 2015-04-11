@@ -19,18 +19,27 @@ namespace L1EmulatorSimulator {
     zeroWalls,
     doubleSubtraction,
     sigmaSubtraction,
+    sigmaSubtractionzeroWalls,
     barrelOnly,
     oneByOne,
     twoByTwo,
     oneByOneANDzeroWalls,
     oneByOneANDzeroWallsANDsigmaSubtraction,
     twoByTwoANDzeroWalls,
-    twoByTwoANDzeroWallsANDsigmaSubtraction
+    twoByTwoANDzeroWallsANDsigmaSubtraction,
+    twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf,
+    slidingSubtractionTwoRegionsNoGapANDzeroWalls,
+    slidingSubtractionTwoRegionsGapANDzeroWalls,
+    slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls
   };
 
   int deltaGctPhi(int phi1, int phi2);
   void CaloRingBackgroundSubtraction(cand region[396], cand subregion[396]);
+  void CaloSlidingBackgroundSubtractionTwoRegionsNoGap(cand region[396], cand subregion[396]);
+  void CaloSlidingBackgroundSubtractionDoubleTwoRegionsNoGap(cand region[396], cand subregion[396]);
+  void CaloSlidingBackgroundSubtractionTwoRegionsGap(cand region[396], cand subregion[396]);
   void CaloRingSigmaBackgroundSubtraction(cand region[396], cand subregion[396]);
+  void CaloRingSigmaBackgroundSubtraction1half(cand region[396], cand subregion[396]);
   void SlidingWindowJetFinder(cand region[396], cand output[8], algoVariation algo);
   void OneByOneFinder(cand region[396], cand output[8], algoVariation algo);
   void TwoByTwoFinder(cand region[396], cand output[8], algoVariation algo);
@@ -43,7 +52,7 @@ namespace L1EmulatorSimulator {
     }
     return diff;
   }
-
+  
   void CaloRingBackgroundSubtraction(cand region[396], cand subregion[396])
   {
     int etaCount[22];
@@ -76,6 +85,127 @@ namespace L1EmulatorSimulator {
       subregion[i].phi = region[i].phi;
     }
   }
+
+
+  void CaloSlidingBackgroundSubtractionTwoRegionsNoGap(cand region[396], cand subregion[396])
+  {
+
+    int puLevelHI[396];  
+    float r_puLevelHI[396]; 
+    int array[22][18];
+  
+    for(unsigned i = 0; i < 396; ++i){
+      puLevelHI[i]=0;
+      r_puLevelHI[i]=0.;
+      array[region[i].eta][region[i].phi] = i;
+    }
+  
+    for(unsigned i = 0; i < 396; ++i){
+    
+	  int regionEta = region[i].eta; 
+	  int regionPhi = region[i].phi;
+	  
+	  int indexPhill=((regionPhi-2)%18+18)%18;
+	  int indexPhil=((regionPhi-1)%18+18)%18;
+	  int indexPhir=((regionPhi+1)%18+18)%18;
+	  int indexPhirr=((regionPhi+2)%18+18)%18; 
+
+	  int globalindll=array[regionEta][indexPhill];
+	  int globalindl=array[regionEta][indexPhil];
+	  int globalindr=array[regionEta][indexPhir];
+	  int globalindrr=array[regionEta][indexPhirr];
+	  
+	  r_puLevelHI[i]=(region[globalindll].pt+region[globalindl].pt+region[globalindr].pt+region[globalindrr].pt);
+	  puLevelHI[i] = floor(r_puLevelHI[i]/4. + 0.5); 
+      subregion[i].pt = std::max(0, region[i].pt - puLevelHI[i]);
+      subregion[i].eta = region[i].eta;
+      subregion[i].phi = region[i].phi;
+    }
+  }
+
+  void CaloSlidingBackgroundSubtractionDoubleTwoRegionsNoGap(cand region[396], cand subregion[396])
+  {
+
+    int puLevelHI[396];  
+    float r_puLevelHI[396]; 
+    int array[22][18];
+  
+    for(unsigned i = 0; i < 396; ++i){
+      puLevelHI[i]=0;
+      r_puLevelHI[i]=0.;
+      array[region[i].eta][region[i].phi] = i;
+    }
+  
+    for(unsigned i = 0; i < 396; ++i){
+    
+	  int regionEta = region[i].eta; 
+	  int regionPhi = region[i].phi;
+	  
+	  if(region[i].phi%2==0){
+	
+	    int indexPartner=((regionPhi+1)%18+18)%18;
+	    int indexPhill=((regionPhi-2)%18+18)%18;
+	    int indexPhil=((regionPhi-1)%18+18)%18;
+	    int indexPhir=((regionPhi+2)%18+18)%18;
+	    int indexPhirr=((regionPhi+3)%18+18)%18; 
+
+	    int globalindPartner=array[regionEta][indexPartner];
+	    int globalindll=array[regionEta][indexPhill];
+	    int globalindl=array[regionEta][indexPhil];
+	    int globalindr=array[regionEta][indexPhir];
+	    int globalindrr=array[regionEta][indexPhirr];
+	    r_puLevelHI[i]=(region[globalindll].pt+region[globalindl].pt+region[globalindr].pt+region[globalindrr].pt);
+	    r_puLevelHI[globalindPartner]=(region[globalindll].pt+region[globalindl].pt+region[globalindr].pt+region[globalindrr].pt);
+	  }
+	}
+	  
+    for(unsigned i = 0; i < 396; ++i){
+	  puLevelHI[i] = floor(r_puLevelHI[i]/4. + 0.5); 
+      subregion[i].pt = std::max(0, region[i].pt - puLevelHI[i]);
+      subregion[i].eta = region[i].eta;
+      subregion[i].phi = region[i].phi;
+    }
+  }
+
+  
+  void CaloSlidingBackgroundSubtractionTwoRegionsGap(cand region[396], cand subregion[396])
+  {
+
+    int puLevelHI[396];  
+    float r_puLevelHI[396]; 
+    int array[22][18];
+  
+    for(unsigned i = 0; i < 396; ++i){
+      puLevelHI[i]=0;
+      r_puLevelHI[i]=0.;
+      array[region[i].eta][region[i].phi] = i;
+    }
+  
+    for(unsigned i = 0; i < 396; ++i){
+    
+	  int regionEta = region[i].eta; 
+	  int regionPhi = region[i].phi;
+	  
+	  int indexPhill=((regionPhi-3)%18+18)%18;
+	  int indexPhil=((regionPhi-2)%18+18)%18;
+	  int indexPhir=((regionPhi+2)%18+18)%18;
+	  int indexPhirr=((regionPhi+3)%18+18)%18; 
+
+	  int globalindll=array[regionEta][indexPhill];
+	  int globalindl=array[regionEta][indexPhil];
+	  int globalindr=array[regionEta][indexPhir];
+	  int globalindrr=array[regionEta][indexPhirr];
+	  
+	  r_puLevelHI[i]=(region[globalindll].pt+region[globalindl].pt+region[globalindr].pt+region[globalindrr].pt);
+	  puLevelHI[i] = floor(r_puLevelHI[i]/4. + 0.5); 
+      subregion[i].pt = std::max(0, region[i].pt - puLevelHI[i]);
+      subregion[i].eta = region[i].eta;
+      subregion[i].phi = region[i].phi;
+    }
+  }
+
+
+  
 
   void CaloRingSigmaBackgroundSubtraction(cand region[396], cand subregion[396])
   {
@@ -114,6 +244,45 @@ namespace L1EmulatorSimulator {
       subregion[i].phi = region[i].phi;
     }
   }
+  
+  void CaloRingSigmaBackgroundSubtraction1half(cand region[396], cand subregion[396])
+  {
+    int etaCount[22];
+    int puLevelHI[22];
+    float r_puLevelHI[22];
+    float r_puLevelHI2[22];
+
+    // 22 values of eta
+    for(unsigned i = 0; i < 22; ++i)
+    {
+      puLevelHI[i] = 0;
+      r_puLevelHI[i] = 0.0;
+      r_puLevelHI2[i] = 0.0;
+      etaCount[i] = 0;
+    }
+
+    for(int i = 0; i < 396; ++i){
+      r_puLevelHI[region[i].eta] += region[i].pt;
+      r_puLevelHI2[region[i].eta] += (region[i].pt * region[i].pt);
+      etaCount[region[i].eta]++;
+    }
+
+    for(unsigned i = 0; i < 22; ++i)
+    {
+      if(etaCount[i] != 18)
+	std::cout << "ERROR: wrong number of regions in phi ring." << std::endl;
+      puLevelHI[i] = floor(r_puLevelHI[i]/18. + 0.5); // this floating point operation should probably be replaced
+      // also subtract an extra sigma
+      puLevelHI[i] += floor(1.5 *TMath::Sqrt( r_puLevelHI2[i]/18. - (r_puLevelHI[i]/18.)*(r_puLevelHI[i]/18.)) + 0.5);
+    }
+
+    for(int i = 0; i < 396; ++i){
+      subregion[i].pt = std::max(0, region[i].pt - puLevelHI[region[i].eta]);
+      subregion[i].eta = region[i].eta;
+      subregion[i].phi = region[i].phi;
+    }
+  }
+
 
   void SlidingWindowJetFinder(cand region[396], cand output[8], algoVariation algo = nominal)
   {
@@ -122,7 +291,7 @@ namespace L1EmulatorSimulator {
       OneByOneFinder(region, output, algo);
       return;
     }
-    else if((algo == twoByTwo) || (algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction))
+    else if((algo == twoByTwo) || (algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction) ||(algo == twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf))
     {
       TwoByTwoFinder(region, output, algo);
       return;
@@ -136,7 +305,7 @@ namespace L1EmulatorSimulator {
 	int regionET = region[i].pt;
 	int regionEta = region[i].eta;
 	int regionPhi = region[i].phi;
-	if(algo == zeroWalls)
+	if(algo == zeroWalls || algo == sigmaSubtractionzeroWalls || algo == slidingSubtractionTwoRegionsNoGapANDzeroWalls || algo == slidingSubtractionTwoRegionsGapANDzeroWalls || algo == slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls)
 	{
 	  if(regionEta == 4 || regionEta == 17) regionET =0;
 	}
@@ -156,7 +325,7 @@ namespace L1EmulatorSimulator {
 	for(int j = 0; j < 396; j++) {
 	  int neighborET = region[j].pt;
 	  int neighborEta = region[j].eta;
-	  if(algo == zeroWalls)
+	  if(algo == zeroWalls || algo == sigmaSubtractionzeroWalls || algo == slidingSubtractionTwoRegionsNoGapANDzeroWalls || algo == slidingSubtractionTwoRegionsGapANDzeroWalls || algo == slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls)
 	  {
 	    if(neighborEta == 4 || neighborEta == 17) neighborET =0;
 	  }
@@ -324,7 +493,7 @@ namespace L1EmulatorSimulator {
 
     for(int i = 0; i < 396; i++) {
       int regionET = region[i].pt;
-      if((algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction))
+      if((algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf))
       {
 	if(region[i].eta == 4 || region[i].eta == 17)
 	  regionET = 0;
@@ -337,7 +506,7 @@ namespace L1EmulatorSimulator {
       unsigned int nNeighbors = 0;
       for(int j = 0; j < 396; j++) {
 	int neighborET = region[j].pt;
-	if((algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction))
+	if((algo == twoByTwoANDzeroWalls) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction) || (algo == twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf))
 	{
 	  if(region[j].eta == 4 || region[j].eta == 17)
 	    neighborET = 0;

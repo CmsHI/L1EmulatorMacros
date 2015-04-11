@@ -10,20 +10,25 @@ set -x
   #1   zeroWalls,
   #2   doubleSubtraction,
   #3   sigmaSubtraction,
-  #4   barrelOnly,
-  #5   oneByOne,
-  #6   twoByTwo,
-  #7  oneByOneANDzeroWalls,
-  #8  oneByOneANDzeroWallsANDsigmaSubtraction,
-  #9  twoByTwoANDzeroWalls,
-  #10  twoByTwoANDzeroWallsANDsigmaSubtraction
+  #4   sigmaSubtractionzeroWalls,
+  #5   barrelOnly,
+  #6   oneByOne,
+  #7   twoByTwo,
+  #8   oneByOneANDzeroWalls,
+  #9   oneByOneANDzeroWallsANDsigmaSubtraction,
+  #10  twoByTwoANDzeroWalls,
+  #11  twoByTwoANDzeroWallsANDsigmaSubtraction
+  #12  twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf
+  #13  slidingSubtractionTwoRegionsNoGapANDzeroWalls
+  #14  slidingSubtractionTwoRegionsNoGapANDzeroWalls
+  #15  slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls
   # };
 
-InputType=(MBData Hydjet276 Hydjet502)
-InputHiForest=("/mnt/hadoop/cms/store/user/luck/L1Emulator/minbiasForest_merged_v2/HiForest_PbPb_Data_minbias_fromSkim_v3.root" "/mnt/hadoop/cms/store/user/ginnocen/Hydjet1p8_TuneDrum_Quenched_MinBias_2760GeV/HiMinBias_Forest_26June2014/d9ab4aca1923b3220eacf8ee0d550950/*.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/HydjetMB_502TeV_740pre8_MCHI2_74_V3_HiForestAndEmulator_v3.root")
-InputL1=("/mnt/hadoop/cms/store/user/men1/L1Data/HIL1DPG/MinBias/HIMinBiasUPC_Skim_HLT_HIMinBiasHfOrBSC_v2_CaloRegionEta516_CMSSW740pre7/L1NTupleMBHIFS.root" "/export/d00/scratch/luck/Hydjet1p8_2760GeV_L1UpgradeAnalyzer_GT_run1_mc_HIon_L1UpgradeAnalyzer.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/HydjetMB_502TeV_740pre8_MCHI2_74_V3_HiForestAndEmulator_v3.root")
+InputType=(MBData Hydjet276 Hydjet502 Hydjet502Dijet30)
+InputHiForest=("/mnt/hadoop/cms/store/user/luck/L1Emulator/minbiasForest_merged_v2/HiForest_PbPb_Data_minbias_fromSkim_v3.root" "/mnt/hadoop/cms/store/user/ginnocen/Hydjet1p8_TuneDrum_Quenched_MinBias_2760GeV/HiMinBias_Forest_26June2014/d9ab4aca1923b3220eacf8ee0d550950/*.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/HydjetMB_502TeV_740pre8_MCHI2_74_V3_HiForestAndEmulator_v5.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/PyquenUnquenched_DiJet_pt30_PbPb_5020GeV_actuallyEmbedded_HiForest.root")
+InputL1=("/mnt/hadoop/cms/store/user/men1/L1Data/HIL1DPG/MinBias/HIMinBiasUPC_Skim_HLT_HIMinBiasHfOrBSC_v2_CaloRegionEta516_CMSSW740pre7/L1NTupleMBHIFS.root" "/export/d00/scratch/luck/Hydjet1p8_2760GeV_L1UpgradeAnalyzer_GT_run1_mc_HIon_L1UpgradeAnalyzer.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/HydjetMB_502TeV_740pre8_MCHI2_74_V3_HiForestAndEmulator_v5.root" "/mnt/hadoop/cms/store/user/luck/L1Emulator/PyquenUnquenched_DiJet_pt30_PbPb_5020GeV_actuallyEmbedded_HiForest.root")
 
-AlgoVariations=(nominal zeroWalls doubleSubtraction sigmaSubtraction barrelOnly oneByOne twoByTwo oneByOneAndzeroWalls oneByOneANDzeroWallsANDsigmaSubtraction twoByTwoANDzeroWalls twoByTwoANDzeroWallsANDsigmaSubtraction)
+AlgoVariations=(nominal zeroWalls doubleSubtraction sigmaSubtraction sigmaSubtractionzeroWalls barrelOnly oneByOne twoByTwo oneByOneAndzeroWalls oneByOneANDzeroWallsANDsigmaSubtraction twoByTwoANDzeroWalls twoByTwoANDzeroWallsANDsigmaSubtraction twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf slidingSubtractionTwoRegionsNoGapANDzeroWalls slidingSubtractionTwoRegionsGapANDzeroWalls slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls)
 
 # compile the macros with g++
 g++ L1JetEmulator.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o L1JetEmulator.exe || exit 1
@@ -32,10 +37,9 @@ g++ makeTurnOn.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o mak
 g++ makeTurnOn_fromSameFile.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o makeTurnOn_fromSameFile.exe || exit 1
 g++ plotTurnOn.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o plotTurnOn.exe || exit 1
 
-
-for sampleNum in 0 1 2
+for sampleNum in 2
 do
-    for algo in 7 8 9 10 #0 1 2 3 4 5 6 7 8 9 10 # only run new combinations now
+    for algo in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
     do
 	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}.root"
 	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}.root"
@@ -45,7 +49,7 @@ do
 	if [[ $sampleNum -eq 0 ]] || [[ $sampleNum -eq 1 ]]
 	then
 	   ./makeTurnOn.exe "$L1Output" "${InputHiForest[sampleNum]}" "$HistOutput" || exit 1
-	elif [[ $sampleNum -eq 2 ]]
+	elif [[ $sampleNum -eq 2 ]] || [[ $sampleNum -eq 3 ]]
 	then
 	   ./makeTurnOn_fromSameFile.exe "$L1Output" "${InputHiForest[sampleNum]}" "$HistOutput" || exit 1
 	fi

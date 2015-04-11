@@ -78,7 +78,12 @@ void L1JetEmulator(TString l1_input = "/export/d00/scratch/luck/HydjetMB_740pre8
     if(algo != L1EmulatorSimulator::doubleSubtraction
        && algo != L1EmulatorSimulator::sigmaSubtraction
        && algo != L1EmulatorSimulator::oneByOneANDzeroWallsANDsigmaSubtraction
-       && algo != L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction)
+       && algo != L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction
+       && algo != L1EmulatorSimulator::slidingSubtractionTwoRegionsNoGapANDzeroWalls
+       && algo != L1EmulatorSimulator::slidingSubtractionTwoRegionsGapANDzeroWalls
+       && algo != L1EmulatorSimulator::slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls
+       && algo != L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf
+       && algo != L1EmulatorSimulator::sigmaSubtractionzeroWalls)
     {
       L1EmulatorSimulator::CaloRingBackgroundSubtraction(regions, subRegions);
     }
@@ -90,9 +95,30 @@ void L1JetEmulator(TString l1_input = "/export/d00/scratch/luck/HydjetMB_740pre8
     }
     else if (algo == L1EmulatorSimulator::sigmaSubtraction
 	     || algo == L1EmulatorSimulator::oneByOneANDzeroWallsANDsigmaSubtraction
-	     || algo == L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction)
+	     || algo == L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction
+	     || algo == L1EmulatorSimulator::sigmaSubtractionzeroWalls)
     {
       L1EmulatorSimulator::CaloRingSigmaBackgroundSubtraction(regions, subRegions);
+    }
+    else if (algo == L1EmulatorSimulator::slidingSubtractionTwoRegionsNoGapANDzeroWalls)
+    {
+      L1EmulatorSimulator::CaloSlidingBackgroundSubtractionTwoRegionsNoGap(regions, subRegions);
+    
+    }
+    else if (algo == L1EmulatorSimulator::slidingSubtractionTwoRegionsGapANDzeroWalls)
+    {
+      L1EmulatorSimulator::CaloSlidingBackgroundSubtractionTwoRegionsGap(regions, subRegions);
+    
+    }
+    else if (algo == L1EmulatorSimulator::slidingSubtractionDoubleTwoRegionsNoGapANDzeroWalls)
+    {
+      L1EmulatorSimulator::CaloSlidingBackgroundSubtractionDoubleTwoRegionsNoGap(regions, subRegions);
+    
+    }
+    else if (algo == L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction1sigmahalf)
+    {
+      L1EmulatorSimulator::CaloRingSigmaBackgroundSubtraction1half(regions, subRegions);
+    
     }
 
 

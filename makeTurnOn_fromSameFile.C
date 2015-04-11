@@ -142,7 +142,7 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
     bool goodEvent = false;
     // 5.02 TeV Hydjet missing pcollisionEventSelection for now
     //if((pcollisionEventSelection == 1) && (montecarlo || (pHBHENoiseFilter == 1)) && (TMath::Abs(vz) < 15))
-    if((montecarlo || (pHBHENoiseFilter == 1)) && (TMath::Abs(vz) < 15))
+    if( (pcollisionEventSelection == 1) && (TMath::Abs(vz) < 15))
     {
       goodEvent = true;
     }
