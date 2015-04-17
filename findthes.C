@@ -23,7 +23,7 @@ const int nBins = 64;
 const int maxPt = 256; // make sure that maxPt/nBins = 4.
 
 
-int find(TString infname, Double_t pTthes, Double_t effthes)
+int find(TString infname, Double_t pTthes, Double_t effthes, int cent)
 {
   TFile* inf = new TFile(infname);
   int i=0,j=0;
@@ -31,7 +31,7 @@ int find(TString infname, Double_t pTthes, Double_t effthes)
   TString ingname;
   for(i=116;i>=0;i-=4)
     {
-      ingname = Form("asymm_pt_%i_0",i);
+      ingname = Form("asymm_pt_%i_%d",i,cent);
       TGraphAsymmErrors* ga = (TGraphAsymmErrors*)inf->Get(ingname);
       if(!ga) break;
       Double_t vx,vy,interx,intermin=1000000.;
@@ -90,7 +90,7 @@ int find(TString infname, Double_t pTthes, Double_t effthes)
 }
 
 
-void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString infn = "hist_Hydjet502_zeroWalls.root",TString outfile = "rate_Hydjet502_zeroWalls.root")
+void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString infn = "hist_Hydjet502_zeroWalls.root",TString outfile = "rate_Hydjet502_zeroWalls", int centrality=0)
 {
   TH1::SetDefaultSumw2();
 
@@ -136,7 +136,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
 
   
   for(int m=0; m<Nthresholds;m++){
-    L1thresholds[m]=find(infn, offlinethresholds[m], .99);
+    L1thresholds[m]=find(infn, offlinethresholds[m], 1.,centrality);
     std::cout<<"threshold"<<L1thresholds[m]<<std::endl;
     rates[m]=rate->GetBinContent(int(L1thresholds[m]/4)+1)*30000;
   }  
@@ -157,7 +157,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
    gr->SetMarkerStyle(21);
    gr->Draw("ALP");
    
-   TFile*foutput=new TFile(outfile.Data(),"recreate");
+   TFile*foutput=new TFile(Form("%s_cent%d.root",outfile.Data(),centrality),"recreate");
    foutput->cd();
    gr->Write();
    foutput->Close();
@@ -167,9 +167,9 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
 
 int main(int argc, char **argv)
 {
-  if(argc == 4)
+  if(argc == 5)
   {
-    findthes(argv[1], argv[2], argv[3]);
+    findthes(argv[1], argv[2], argv[3], atoi(argv[4]));
     return 0;
   }else  {
     std::cout << "Usage: \nmakeTurnOn_fromSameFile.exe <input_HiForest_file> <output_file>" << std::endl;

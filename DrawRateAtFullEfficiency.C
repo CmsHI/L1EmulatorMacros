@@ -6,7 +6,7 @@
 #include <TLine.h>
 #include <iostream>
 
-void DrawRateAtFullEfficiency()
+void DrawRateAtFullEfficiency(int centrality=0)
 {
 	const Int_t INPUTFILES = 7;
 
@@ -20,7 +20,7 @@ void DrawRateAtFullEfficiency()
 	TGraphAsymmErrors *asymm[INPUTFILES];
 
 	for(int i = 0; i < INPUTFILES; i++){
-		inFile[i] = TFile::Open(Form("results/filerate_Hydjet502_%s.root",inFileName[i].Data()));
+		inFile[i] = TFile::Open(Form("results/filerate_Hydjet502_%s_cent%d.root",inFileName[i].Data(),centrality));
 		asymm[i] = (TGraphAsymmErrors*)inFile[i]->Get("Graph");
 		asymm[i]->SetMarkerColor(COLORS[i]);
 		asymm[i]->SetLineColor(COLORS[i]);
@@ -52,6 +52,7 @@ void DrawRateAtFullEfficiency()
 
 	leg->Draw();
 
-	c1->SaveAs(Form("%s.pdf",outFileTag.Data()));
+	c1->SaveAs(Form("%s_cent%d.pdf",outFileTag.Data(),centrality));
+	c1->SaveAs(Form("%s_cent%d.root",outFileTag.Data(),centrality));
 
 }

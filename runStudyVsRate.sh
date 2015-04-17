@@ -36,11 +36,14 @@ for sampleNum in 2
 do
     for algo in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
     do
-	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}.root"
-	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}.root"
-	Output="results/filerate_${InputType[sampleNum]}_${AlgoVariations[algo]}.root"
-	PlotOutputTag="${InputType[sampleNum]}_${AlgoVariations[algo]}"
-	./findthes.exe "$L1Output" "$HistOutput" "$Output"|| exit 1
-    done
-done
+      for centrality in 0
+      do
 
+	  L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}.root"
+	  HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}.root"
+	  Output="results/filerate_${InputType[sampleNum]}_${AlgoVariations[algo]}"
+	  PlotOutputTag="${InputType[sampleNum]}_${AlgoVariations[algo]}"
+	  ./findthes.exe "$L1Output" "$HistOutput" "$Output" $centrality|| exit 1
+      done
+  done
+done
