@@ -445,14 +445,15 @@ namespace L1EmulatorSimulator {
       }
       // require that the "center" of the 2x2 still be a local maxima in 3x3
       // this should prevent overlaps between 2x2 jets
-      if(regionET > neighborN_et &&
-	 regionET > neighborNW_et &&
-	 regionET > neighborW_et &&
-	 regionET > neighborSW_et &&
-	 regionET >= neighborNE_et &&
-	 regionET >= neighborE_et &&
-	 regionET >= neighborSE_et &&
-	 regionET >= neighborS_et) {
+      /* if(regionET > neighborN_et && */
+      /* 	 regionET > neighborNW_et && */
+      /* 	 regionET > neighborW_et && */
+      /* 	 regionET > neighborSW_et && */
+      /* 	 regionET >= neighborNE_et && */
+      /* 	 regionET >= neighborE_et && */
+      /* 	 regionET >= neighborSE_et && */
+      /* 	 regionET >= neighborS_et) */
+      {
 
 
 	unsigned int jetET = regionET +

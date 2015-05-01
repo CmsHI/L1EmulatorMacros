@@ -8,18 +8,18 @@
 
 void DrawRateAtFullEfficiency(int centrality=0)
 {
-	const Int_t INPUTFILES = 3;
+	const Int_t INPUTFILES = 2;
 
 
 	TString outFileTag = "RateAtFullEfficiency";
-	TString inFileName[INPUTFILES] = {"zeroWalls","twoByTwoANDzeroWalls", "twoByTwoANDzeroWallsANDsigmaSubtraction"};
+	TString inFileName[INPUTFILES] = {"twoByTwoANDzeroWalls", "twoByTwoANDzeroWallsANDsigmaSubtraction"};
 
 	TFile *inFile[INPUTFILES];
-	const Int_t COLORS[INPUTFILES] = {kBlack, kRed, kBlue};
+	const Int_t COLORS[INPUTFILES] = {kBlack, kRed};//, kBlue};
 	TGraphAsymmErrors *asymm[INPUTFILES];
 
 	for(int i = 0; i < INPUTFILES; i++){
-		inFile[i] = TFile::Open(Form("results/filerate_Hydjet502_%s_cent%d.root",inFileName[i].Data(),centrality));
+		inFile[i] = TFile::Open(Form("rate_Hydjet502Dijet80_%s.root_cent%d.root",inFileName[i].Data(),centrality));
 		asymm[i] = (TGraphAsymmErrors*)inFile[i]->Get("Graph");
 		asymm[i]->SetMarkerColor(COLORS[i]);
 		asymm[i]->SetLineColor(COLORS[i]);
@@ -51,7 +51,7 @@ void DrawRateAtFullEfficiency(int centrality=0)
 
 	leg->Draw();
 
-	c1->SaveAs(Form("%s_cent%d.pdf",outFileTag.Data(),centrality));
-	c1->SaveAs(Form("%s_cent%d.root",outFileTag.Data(),centrality));
+	//c1->SaveAs(Form("%s_cent%d.pdf",outFileTag.Data(),centrality));
+	//c1->SaveAs(Form("%s_cent%d.root",outFileTag.Data(),centrality));
 
 }
