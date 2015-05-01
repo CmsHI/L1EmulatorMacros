@@ -11,7 +11,7 @@ void plotTurnOn(TString inFileName, TString outFileTag)
   TFile *inFile = TFile::Open(inFileName);
 
   const Int_t THRESHOLDS = 4;
-  const Float_t L1_THRESHOLD[THRESHOLDS] = {16, 36, 52, 80};
+  const Int_t L1_THRESHOLD[THRESHOLDS] = {16, 36, 52, 80};
   const Int_t COLORS[THRESHOLDS] = {kBlack, kRed, kBlue, kGreen+3};//, kMagenta+3};
   TGraphAsymmErrors *asymm[THRESHOLDS];//[2];
 
