@@ -12,7 +12,7 @@ for sample in $SAMPLES
 do
     for algo in $ALGOS
     do
-	RATEFILE="~/scratch/EmulatorResults/${sample}_JetResults_${algo}${BINSIZES[BINSIZE]}.root"
+	RATEFILE="~/scratch/EmulatorResults/Hydjet502_JetResults_${algo}${BINSIZES[BINSIZE]}.root"
 	HISTFILE="hist_${sample}_${algo}${BINSIZES[BINSIZE]}.root"
 	OUTFILE="rate_${sample}_${algo}${BINSIZES[BINSIZE]}"
 
