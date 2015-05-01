@@ -33,13 +33,13 @@ g++ makeTurnOn_fromSameFile.C $(root-config --cflags --libs) -Werror -Wall -Wext
 g++ plotTurnOn.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o plotTurnOn.exe || exit 1
 
 
-for sampleNum in 4
+for sampleNum in 2 3 4
 do
     for algo in 9 10
     do
-	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}_2GeVBin.root"
-	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}_2GeVBin.root"
-	PlotOutputTag="${InputType[sampleNum]}_${AlgoVariations[algo]}_2GeVBin"
+	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}.root"
+	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}.root"
+	PlotOutputTag="${InputType[sampleNum]}_${AlgoVariations[algo]}"
 	./L1JetEmulator.exe "${InputL1[sampleNum]}" "$L1Output" $algo || exit 1
 	./makeRateCurve.exe "$L1Output" || exit 1
 	if [[ $sampleNum -eq 0 ]]
