@@ -36,8 +36,8 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
     if(!ga) break;
     Double_t vx,vy,intermin=1000000.;
     //////// Kaya's modificiation ////////
-    Double_t vx_selected=-1;
-    Bool_t eff4theRest  =true;	// true if the turn on curve stays 100% for
+    //Double_t vx_selected=-1;
+    //Bool_t eff4theRest  =true;	// true if the turn on curve stays 100% for
     // each offline pt larger than the given threshold
     //////// Kaya's modificiation - END ////////
     for(j=0;j<ga->GetN();j++)
@@ -48,8 +48,8 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
 	//cout<<vy<<endl;
 	if(vy>=effthes)
 	{
-	  vx_selected=vx;
-	  eff4theRest=true;
+	  //vx_selected=vx;
+	  //eff4theRest=true;
 	  L1threshold_FOUND=true;
 	}
 	//		  break;		//////// Kaya's modificiation ////////
@@ -59,7 +59,7 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
       {
 	if(vy<effthes)
 	{
-	  eff4theRest=false;
+	  //eff4theRest=false;
 	  L1threshold_FOUND=false;	// we want turn curve to stay at 100% once it hits 100%
 	}
       }
@@ -70,11 +70,11 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
     }
     if (L1threshold_FOUND)	// an L1 threshold has been found
     {
-      cout << "An L1 threshold has been found." << endl;
-      cout << "studied offline pT : " << pTthes << endl;
-      cout << "L1 threshold : " << (i*4) << endl;
-      cout << "100% eff. is reached at offline pT : " << vx_selected << endl;
-      cout << "100% eff. for each offline pt larger than the given threshold : " << eff4theRest << endl;
+      // cout << "An L1 threshold has been found." << endl;
+      // cout << "studied offline pT : " << pTthes << endl;
+      // cout << "L1 threshold : " << (i*4) << endl;
+      // cout << "100% eff. is reached at offline pT : " << vx_selected << endl;
+      // cout << "100% eff. for each offline pt larger than the given threshold : " << eff4theRest << endl;
 
       // if(!flagx)
       // {
@@ -129,7 +129,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
   rate = new TH1D("rate",";L1 p_{T};Rate",nBins,0,maxPt);
   double total_integral = counts->Integral();
 
-  std::cout << "Trigger Value \t Rate @ 30kHz" << std::endl;
+  //std::cout << "Trigger Value \t Rate @ 30kHz" << std::endl;
   for(int i = 0; i < nBins; i++)
   {
     double j = (double)i*(double)maxPt/(double)nBins;
@@ -138,16 +138,18 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
     //std::cout << "L1_SingleJet" << j << "\t" << integral/total_integral*30000 << std::endl;
   }
 
-  const int Nthresholds=11;
-  double offlinethresholds[Nthresholds]={30,40,50,60,70,80,90,100,120,130,140};
-  double L1thresholds[Nthresholds]={-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.};
-  double rates[Nthresholds]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  const int Nthresholds=12;
+  double offlinethresholds[Nthresholds]={30,40,50,60,70,80,90,100,110,120,130,140};
+  double L1thresholds[Nthresholds]={-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.};
+  double rates[Nthresholds]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 
+  std::cout << "Offline Threshold. L1 Threshold. Rate." << std::endl;
   for(int m=0; m<Nthresholds;m++){
     L1thresholds[m]=find(infn, offlinethresholds[m], 1.,centrality);
     rates[m]=rate->GetBinContent(int(L1thresholds[m]/4)+1)*30000;
-    std::cout<<"offline threshold="<<offlinethresholds[m]<<", L1 threshold="<<L1thresholds[m]<<", rate="<<rates[m]<<std::endl << std::endl;
+    //std::cout<<"offline threshold="<<offlinethresholds[m]<<", L1 threshold="<<L1thresholds[m]<<", rate="<<rates[m]<<std::endl << std::endl;
+    std::cout << offlinethresholds[m] << " " << L1thresholds[m] << " " << rates[m] << std::endl;
   }
   TCanvas* c1 = new TCanvas("c1","A Simple Graph with assymetric error bars",200,10,700,500);
   c1->SetFillColor(42);
@@ -155,10 +157,10 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
   c1->GetFrame()->SetFillColor(21);
   c1->GetFrame()->SetBorderSize(12);
 
-  Double_t exl[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
-  Double_t eyl[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
-  Double_t exh[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
-  Double_t eyh[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+  Double_t exl[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+  Double_t eyl[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+  Double_t exh[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+  Double_t eyh[Nthresholds] ={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
 
   TGraphAsymmErrors *gr = new TGraphAsymmErrors(Nthresholds,offlinethresholds,rates,exl,exh,eyl,eyh);
   gr->SetTitle("TGraphAsymmErrors Example");

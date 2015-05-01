@@ -445,35 +445,41 @@ namespace L1EmulatorSimulator {
       }
       // require that the "center" of the 2x2 still be a local maxima in 3x3
       // this should prevent overlaps between 2x2 jets
-      /* if(regionET > neighborN_et && */
-      /* 	 regionET > neighborNW_et && */
-      /* 	 regionET > neighborW_et && */
-      /* 	 regionET > neighborSW_et && */
-      /* 	 regionET >= neighborNE_et && */
-      /* 	 regionET >= neighborE_et && */
-      /* 	 regionET >= neighborSE_et && */
-      /* 	 regionET >= neighborS_et) */
+      bool localmaxima = false;
+      if(regionET > neighborN_et &&
+      	 regionET > neighborNW_et &&
+      	 regionET > neighborW_et &&
+      	 regionET > neighborSW_et &&
+      	 regionET >= neighborNE_et &&
+      	 regionET >= neighborE_et &&
+      	 regionET >= neighborSE_et &&
+      	 regionET >= neighborS_et)
       {
-
-
-	unsigned int jetET = regionET +
-	  neighborS_et + neighborE_et + neighborSE_et;
-
-	int jetPhi = regionPhi;
-	int jetEta = regionEta;
-
-	cand theJet;
-	theJet.pt = jetET / 8; // factor of 8 comes from hardware scale change
-	theJet.eta = jetEta;
-	theJet.phi = jetPhi;
-
-	const bool forward = (jetEta < 4 || jetEta > 17);
-
-	if(forward)
-	  forjets.push_back(theJet);
-	else
-	  cenjets.push_back(theJet);
+	localmaxima = true;
       }
+      // disable the local-maxima check, but fool the compiler into thinking the
+      // variables are still used. Dirty hack.
+      if(localmaxima){
+	regionET+=0;
+      }
+
+      unsigned int jetET = regionET +
+	neighborS_et + neighborE_et + neighborSE_et;
+
+      int jetPhi = regionPhi;
+      int jetEta = regionEta;
+
+      cand theJet;
+      theJet.pt = jetET / 8; // factor of 8 comes from hardware scale change
+      theJet.eta = jetEta;
+      theJet.phi = jetPhi;
+
+      const bool forward = (jetEta < 4 || jetEta > 17);
+
+      if(forward)
+	forjets.push_back(theJet);
+      else
+	cenjets.push_back(theJet);
     }
 
 
