@@ -4,7 +4,7 @@ ALGOS="twoByTwoANDzeroWalls twoByTwoANDzeroWallsANDsigmaSubtraction"
 BINSIZES=("" "_2GeVBin")
 SAMPLES="Hydjet502 Hydjet502Dijet30 Hydjet502Dijet80"
 
-BINSIZE=0
+BINSIZE=1
 
 g++ findthes.C $(root-config --cflags --libs) -Werror -Wall -Wextra -O2 -o findthes.exe || exit 1
 
