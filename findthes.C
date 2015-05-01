@@ -19,7 +19,7 @@ using namespace std;
 
 #define BIN_NUM 40;
 const int MAXJETS = 8;
-const int nBins = 150;
+const int nBins = 75;
 const int maxPt = 300; // make sure that maxPt/nBins = 2.
 
 
@@ -29,9 +29,9 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
   int i=0,j=0;
   Bool_t L1threshold_FOUND=false;		// "flag" renamed to "L1threshold_FOUND"
   TString ingname;
-  for(i=99;i>=0;i-=1)
+  for(i=29;i>=0;i-=1)
   {
-    ingname = Form("asymm_pt_%d_%d",i*2,cent);
+    ingname = Form("asymm_pt_%d_%d",i*4,cent);
     TGraphAsymmErrors* ga = (TGraphAsymmErrors*)inf->Get(ingname);
     if(!ga) break;
     Double_t vx,vy,intermin=1000000.;
@@ -72,7 +72,7 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
     {
       cout << "An L1 threshold has been found." << endl;
       cout << "studied offline pT : " << pTthes << endl;
-      cout << "L1 threshold : " << (i*2) << endl;
+      cout << "L1 threshold : " << (i*4) << endl;
       cout << "100% eff. is reached at offline pT : " << vx_selected << endl;
       cout << "100% eff. for each offline pt larger than the given threshold : " << eff4theRest << endl;
 
@@ -86,7 +86,7 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
       // 	cout<<endl;
       // }
 
-      return i*2;
+      return i*4;
     }
   }
   // none of the L1 thresholds matched
@@ -146,7 +146,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
 
   for(int m=0; m<Nthresholds;m++){
     L1thresholds[m]=find(infn, offlinethresholds[m], 1.,centrality);
-    rates[m]=rate->GetBinContent(int(L1thresholds[m]/2)+1)*30000;
+    rates[m]=rate->GetBinContent(int(L1thresholds[m]/4)+1)*30000;
     std::cout<<"offline threshold="<<offlinethresholds[m]<<", L1 threshold="<<L1thresholds[m]<<", rate="<<rates[m]<<std::endl << std::endl;
   }
   TCanvas* c1 = new TCanvas("c1","A Simple Graph with assymetric error bars",200,10,700,500);
