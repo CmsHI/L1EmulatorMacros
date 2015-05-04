@@ -65,7 +65,7 @@ for sampleNum in 2 3 4
 do
     for algo in 9 10
     do
-	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}.root"
+	L1Output="~/scratch/EmulatorResults/Hydjet502_JetResults_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}.root"
 	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}.root"
 	THRESHOUTFILE="rate_${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}"
 	echo "Analyzing ${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}"
