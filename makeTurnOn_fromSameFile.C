@@ -40,7 +40,7 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
 
   TFile *inFile = TFile::Open(inHiForestFileName);
   TFile *inL1File = TFile::Open(inL1Name);
-  TTree *f1Tree = (TTree*)inFile->Get("akPu3CaloJetAnalyzer/t");
+  TTree *f1Tree = (TTree*)inFile->Get("akPu4CaloJetAnalyzer/t");
   TTree *fEvtTree = (TTree*)inFile->Get("hiEvtAnalyzer/HiTree");
   TTree *fSkimTree = (TTree*)inFile->Get("skimanalysis/HltTree");
   //TTree *l1Tree = (TTree*)inFile->Get("L1UpgradeAnalyzer/L1UpgradeTree");

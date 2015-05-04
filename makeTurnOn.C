@@ -39,7 +39,7 @@ void makeTurnOn(TString inL1FileName, TString inHiForestFileName, TString outFil
   l1Tree->SetBranchAddress("jet_hwPhi",l1_hwPhi);
   l1Tree->SetBranchAddress("jet_pt",l1_pt);
 
-  TChain *f1Tree = new TChain("akPu3CaloJetAnalyzer/t","f1Tree");
+  TChain *f1Tree = new TChain("akPu4CaloJetAnalyzer/t","f1Tree");
   TChain *fEvtTree = new TChain("hiEvtAnalyzer/HiTree","fEvtTree");
   TChain *fSkimTree = new TChain("skimanalysis/HltTree","fSkimTree");
 
