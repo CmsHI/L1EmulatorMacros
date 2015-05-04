@@ -6,14 +6,17 @@
 
 #include <iostream>
 
+#include "L1EmulatorSimulator.h"
+
 void makeRateCurve(TString inFileName = "Hydjet502_JetResults.root")
 {
   std::cout << "Analyzing " << inFileName << std::endl;
   TH1::SetDefaultSumw2();
 
   const int MAXJETS = 8;
-  const int nBins = 64;
-  const int maxPt = 256; // make sure that maxPt/nBins = 4.
+  //const int nBins = 64;
+  const int maxPt = 256;
+  const int nBins = maxPt / L1JETSCALE;
 
   TFile *inFile = TFile::Open(inFileName);
   TTree *inTree;

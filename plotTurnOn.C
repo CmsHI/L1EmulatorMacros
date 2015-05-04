@@ -26,9 +26,9 @@ void plotTurnOn(TString inFileName, TString outFileTag)
     //asymm[i][1]->SetMarkerStyle(25);
   }
 
-  // these values MUST MATCH those used in makeTurnOn.C
+  // these values don't matter, just for the empty histo
   const int nBins = 75;
-  const double maxPt = 300;
+  const int maxPt = 300;
 
   TH1D *hEmpty = new TH1D("hEmpty",Form(";Jet p_{T} (GeV);Efficiency"),nBins,0,maxPt);
 

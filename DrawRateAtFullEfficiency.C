@@ -19,7 +19,7 @@ void DrawRateAtFullEfficiency(int centrality=0)
   TGraphAsymmErrors *asymm[INPUTFILES];
 
   for(int i = 0; i < INPUTFILES; i++){
-    inFile[i] = TFile::Open(Form("rate_Hydjet502Dijet80_%s_cent%d.root",inFileName[i].Data(),centrality));
+    inFile[i] = TFile::Open(Form("rate_Hydjet502_%s_cent%d.root",inFileName[i].Data(),centrality));
     asymm[i] = (TGraphAsymmErrors*)inFile[i]->Get("Graph");
     asymm[i]->SetMarkerColor(COLORS[i]);
     asymm[i]->SetLineColor(COLORS[i]);

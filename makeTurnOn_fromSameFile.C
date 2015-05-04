@@ -15,17 +15,11 @@
 #include <vector>
 #include <iostream>
 
-//#include "EventMatchingCMS.h"
+#include "L1EmulatorSimulator.h"
 
 const int MAXL1JETS = 8;
 const int MAXJETS = 500;
-const Int_t THRESHOLDS = 30;
-const Double_t L1_THRESHOLD[THRESHOLDS] = {0, 4, 8, 12, 16, 20, 24,
-					   28, 32, 36, 40, 44, 48,
-					   52, 56, 60, 64, 68, 72,
-					   76, 80, 84, 88, 92, 96,
-					   100, 104, 108, 112, 116};
-
+const Int_t THRESHOLDS = ((L1JETSCALE==4) ? 30 : 100);
 
 void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileName, bool montecarlo = false, bool genJets = false)
 {
@@ -110,8 +104,9 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
     f1Tree->SetBranchAddress("genphi",genphi);
   }
 
-  const int nBins = 75;
-  const double maxPt = 300;
+  //const int nBins = 75;
+  const int maxPt = 300;
+  const int nBins = maxPt / L1JETSCALE;
 
   TH1D *l1Pt = new TH1D("l1Pt",";L1 p_{T} (GeV)",nBins,0,maxPt);
   TH1D *fPt[3];
@@ -124,7 +119,7 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
   {
     for(int j = 0; j < 3; ++j)
     {
-      accepted[i][j] = new TH1D(Form("accepted_pt%d_%d",(int)L1_THRESHOLD[i],j),";offline p_{T}",nBins,0,maxPt);
+      accepted[i][j] = new TH1D(Form("accepted_pt%d_%d",(i * L1JETSCALE),j),";offline p_{T}",nBins,0,maxPt);
     }
   }
 
@@ -195,7 +190,7 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
 
     for(int i = 0; i < THRESHOLDS; ++i)
     {
-      if(maxl1pt>=L1_THRESHOLD[i])
+      if(maxl1pt >= (i*L1JETSCALE))
       {
 	accepted[i][0]->Fill(maxfpt);
 	if(hiBin < 60)
@@ -212,7 +207,7 @@ void makeTurnOn(TString inL1Name, TString inHiForestFileName, TString outFileNam
     {
       a[k][l] = new TGraphAsymmErrors();
       a[k][l]->BayesDivide(accepted[k][l],fPt[l]);
-      a[k][l]->SetName(Form("asymm_pt_%d_%d",(int)L1_THRESHOLD[k],l));
+      a[k][l]->SetName(Form("asymm_pt_%d_%d",(k*L1JETSCALE),l));
     }
   }
 

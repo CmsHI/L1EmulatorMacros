@@ -17,10 +17,13 @@ using namespace std;
 #include <TCanvas.h>
 #include <TFrame.h>
 
+#include "L1EmulatorSimulator.h"
+
 #define BIN_NUM 40;
 const int MAXJETS = 8;
-const int nBins = 75;
+//const int nBins = 75;
 const int maxPt = 300; // make sure that maxPt/nBins = 2.
+const int nBins = maxPt / L1JETSCALE;
 
 
 double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
@@ -29,9 +32,9 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
   int i=0,j=0;
   Bool_t L1threshold_FOUND=false;		// "flag" renamed to "L1threshold_FOUND"
   TString ingname;
-  for(i=29;i>=0;i-=1)
+  for(i=((L1JETSCALE==4) ? 29 : 99);i>=0;i-=1)
   {
-    ingname = Form("asymm_pt_%d_%d",i*4,cent);
+    ingname = Form("asymm_pt_%d_%d",i*(L1JETSCALE),cent);
     TGraphAsymmErrors* ga = (TGraphAsymmErrors*)inf->Get(ingname);
     if(!ga) break;
     Double_t vx,vy,intermin=1000000.;
@@ -86,7 +89,7 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
       // 	cout<<endl;
       // }
 
-      return i*4;
+      return i*(L1JETSCALE);
     }
   }
   // none of the L1 thresholds matched
@@ -147,7 +150,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
   std::cout << "Offline Threshold. L1 Threshold. Rate." << std::endl;
   for(int m=0; m<Nthresholds;m++){
     L1thresholds[m]=find(infn, offlinethresholds[m], 1.,centrality);
-    rates[m]=rate->GetBinContent(int(L1thresholds[m]/4)+1)*30000;
+    rates[m]=rate->GetBinContent(int(L1thresholds[m]/(L1JETSCALE))+1)*30000;
     //std::cout<<"offline threshold="<<offlinethresholds[m]<<", L1 threshold="<<L1thresholds[m]<<", rate="<<rates[m]<<std::endl << std::endl;
     std::cout << offlinethresholds[m] << " " << L1thresholds[m] << " " << rates[m] << std::endl;
   }
