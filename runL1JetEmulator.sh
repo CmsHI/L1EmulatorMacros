@@ -57,7 +57,6 @@ do
 	   ./makeTurnOn_fromSameFile.exe "$L1Output" "${InputHiForest[sampleNum]}" "$HistOutput" 1 0 || exit 1
 	fi
 	./plotTurnOn.exe "$HistOutput" "$PlotOutputTag" || exit 1
-	./findthes.exe "$L1Ouput" "$HistOutput" "$THRESHOUTFILE" 0 || exit 1
     done
 done
 
@@ -66,6 +65,11 @@ for sampleNum in 2 3 4
 do
     for algo in 9 10
     do
-	./findthes.exe "$L1Ouput" "$HistOutput" "$THRESHOUTFILE" 0 || exit 1
+	L1Output="~/scratch/EmulatorResults/${InputType[sampleNum]}_JetResults_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}.root"
+	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}.root"
+	THRESHOUTFILE="rate_${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}"
+	echo "Analyzing ${InputType[sampleNum]}_${AlgoVariations[algo]}${BINSIZES[BINSIZE]}"
+	./findthes.exe "$L1Output" "$HistOutput" "$THRESHOUTFILE" 0 || exit 1
+	echo ""
     done
 done
