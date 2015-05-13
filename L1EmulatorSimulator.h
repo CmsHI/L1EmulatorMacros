@@ -28,7 +28,8 @@ namespace L1EmulatorSimulator {
     oneByOneANDzeroWalls,
     oneByOneANDzeroWallsANDsigmaSubtraction,
     twoByTwoANDzeroWalls,
-    twoByTwoANDzeroWallsANDsigmaSubtraction
+    twoByTwoANDzeroWallsANDsigmaSubtraction,
+    legacy
   };
 
   enum seedObject {
@@ -446,9 +447,6 @@ namespace L1EmulatorSimulator {
 	  continue;
 	}
       }
-      // require that the "center" of the 2x2 still be a local maxima in 3x3
-      // this should prevent overlaps between 2x2 jets
-      bool localmaxima = false;
       if(regionET > neighborN_et &&
       	 regionET > neighborNW_et &&
       	 regionET > neighborW_et &&
@@ -458,31 +456,35 @@ namespace L1EmulatorSimulator {
       	 regionET >= neighborSE_et &&
       	 regionET >= neighborS_et)
       {
-	localmaxima = true;
+	unsigned int jetET_NW;
+	unsigned int jetET_NE;
+	unsigned int jetET_SW;
+	unsigned int jetET_SE;
+
+	jetET_NW = regionET + neighborW_et + neighborNW_et + neighborN_et;
+	jetET_NE = regionET + neighborE_et + neighborNE_et + neighborN_et;
+	jetET_SW = regionET + neighborS_et + neighborSW_et + neighborW_et;
+	jetET_SE = regionET + neighborS_et + neighborSE_et + neighborE_et;
+
+	unsigned int jetET = std::max(jetET_NW, jetET_NE);
+	jetET = std::max(jetET, jetET_SW);
+	jetET = std::max(jetET, jetET_SE);
+
+	int jetPhi = regionPhi;
+	int jetEta = regionEta;
+
+	cand theJet;
+	theJet.pt = jetET / (2*L1JETSCALE); // factor of 8 comes from hardware scale change
+	theJet.eta = jetEta;
+	theJet.phi = jetPhi;
+
+	const bool forward = (jetEta < 4 || jetEta > 17);
+
+	if(forward)
+	  forjets.push_back(theJet);
+	else
+	  cenjets.push_back(theJet);
       }
-      // disable the local-maxima check, but fool the compiler into thinking the
-      // variables are still used. Dirty hack.
-      if(localmaxima){
-	regionET+=0;
-      }
-
-      unsigned int jetET = regionET +
-	neighborS_et + neighborE_et + neighborSE_et;
-
-      int jetPhi = regionPhi;
-      int jetEta = regionEta;
-
-      cand theJet;
-      theJet.pt = jetET / (2*L1JETSCALE); // factor of 8 comes from hardware scale change
-      theJet.eta = jetEta;
-      theJet.phi = jetPhi;
-
-      const bool forward = (jetEta < 4 || jetEta > 17);
-
-      if(forward)
-	forjets.push_back(theJet);
-      else
-	cenjets.push_back(theJet);
     }
 
 

@@ -108,7 +108,7 @@ void makeTurnOn(TString inL1FileName, TString inHiForestFileName, TString outFil
   f1Tree->SetBranchAddress("swissCrx",swissCrx);
   f1Tree->SetBranchAddress("seedTime",seedTime);
 
-  const int nBins = 200;
+  const int nBins = 100;
   const double maxPt = 100;
 
   TH1D *l1Pt = new TH1D("l1Pt",";L1 p_{T} (GeV)",nBins,0,maxPt);
@@ -281,9 +281,9 @@ void makeTurnOn(TString inL1FileName, TString inHiForestFileName, TString outFil
 
       for(int i = 0; i < MAXL1JETS; ++i)
       {
-	if(jets[i].pt*4 > maxl1pt)
+	if(jets[i].pt * (L1JETSCALE) > maxl1pt)
 	{
-	  maxl1pt = jets[i].pt * 4;
+	  maxl1pt = jets[i].pt * (L1JETSCALE);
 	  maxl1eta = physicalEta(jets[i].eta);
 	  maxl1phi = physicalPhi(jets[i].phi);
 	}

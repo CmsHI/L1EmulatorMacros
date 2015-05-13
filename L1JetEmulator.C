@@ -78,7 +78,8 @@ void L1JetEmulator(TString l1_input = "/export/d00/scratch/luck/HydjetMB_740pre8
     if(algo != L1EmulatorSimulator::doubleSubtraction
        && algo != L1EmulatorSimulator::sigmaSubtraction
        && algo != L1EmulatorSimulator::oneByOneANDzeroWallsANDsigmaSubtraction
-       && algo != L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction)
+       && algo != L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction
+       && algo != L1EmulatorSimulator::legacy)
     {
       L1EmulatorSimulator::CaloRingBackgroundSubtraction(regions, subRegions);
     }
@@ -93,6 +94,13 @@ void L1JetEmulator(TString l1_input = "/export/d00/scratch/luck/HydjetMB_740pre8
 	     || algo == L1EmulatorSimulator::twoByTwoANDzeroWallsANDsigmaSubtraction)
     {
       L1EmulatorSimulator::CaloRingSigmaBackgroundSubtraction(regions, subRegions);
+    }
+    else if (algo == L1EmulatorSimulator::legacy)
+    {
+      for(int i = 0; i < 396; i++)
+      {
+	subRegions[i] = regions[i];
+      }
     }
 
 
