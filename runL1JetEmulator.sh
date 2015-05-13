@@ -70,7 +70,7 @@ do
 	HistOutput="hist_${InputType[sampleNum]}_${AlgoVariations[algo]}${LABELS[LABEL]}.root"
 	THRESHOUTFILE="rate_${InputType[sampleNum]}_${AlgoVariations[algo]}${LABELS[LABEL]}"
 	echo "Analyzing ${InputType[sampleNum]}_${AlgoVariations[algo]}${LABELS[LABEL]}"
-	./findthes.exe "$L1Output" "$HistOutput" "$THRESHOUTFILE" 0 || exit 1
+	./findthes.exe "$L1Output" "$HistOutput" "$THRESHOUTFILE" 1.0 0 || exit 1
 	echo ""
     done
 done

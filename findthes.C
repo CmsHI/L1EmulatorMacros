@@ -102,7 +102,7 @@ double find(TString infname, Double_t pTthes, Double_t effthes, int cent)
 }
 
 
-void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString infn = "hist_Hydjet502_zeroWalls.root",TString outfile = "rate_Hydjet502_zeroWalls", int centrality=0)
+void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString infn = "hist_Hydjet502_zeroWalls.root",TString outfile = "rate_Hydjet502_zeroWalls", double REQUIRED_EFF_PER_BIN = 1.0, int centrality=0)
 {
   TH1::SetDefaultSumw2();
 
@@ -149,7 +149,7 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
 
   std::cout << "Offline Threshold. L1 Threshold. Rate." << std::endl;
   for(int m=0; m<Nthresholds;m++){
-    L1thresholds[m]=find(infn, offlinethresholds[m], 1.,centrality);
+    L1thresholds[m]=find(infn, offlinethresholds[m], REQUIRED_EFF_PER_BIN,centrality);
     rates[m]=rate->GetBinContent(int(L1thresholds[m]/(L1JETSCALE))+1)*30000;
     //std::cout<<"offline threshold="<<offlinethresholds[m]<<", L1 threshold="<<L1thresholds[m]<<", rate="<<rates[m]<<std::endl << std::endl;
     std::cout << offlinethresholds[m] << " " << L1thresholds[m] << " " << rates[m] << std::endl;
@@ -184,9 +184,9 @@ void findthes(TString inFileName = "Hydjet502_JetResults_zeroWalls.root",TString
 
 int main(int argc, char **argv)
 {
-  if(argc == 5)
+  if(argc == 6)
   {
-    findthes(argv[1], argv[2], argv[3], atoi(argv[4]));
+    findthes(argv[1], argv[2], argv[3], atof(argv[4]), atoi(argv[5]));
     return 0;
   }else  {
     return 1;
