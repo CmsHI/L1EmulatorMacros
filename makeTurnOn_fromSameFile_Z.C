@@ -14,11 +14,11 @@
 
 #include <vector>
 #include <iostream>
-#include <string>
+//#include <string>
 
-#include "L1EmulatorSimulator.h"
+//#include "L1EmulatorSimulator.h"
 
-using namespace L1EmulatorSimulator;
+//using namespace L1EmulatorSimulator;
 
 const int MAXL1EMCANDS = 144;
 const int MAXL1REGIONS = 396;
@@ -27,12 +27,12 @@ const int MAXPHOTONS = 500;
 const Int_t THRESHOLDS = 6;
 const Int_t MAXGEN = 200000;
 
-const std::string THRESHNAMES[THRESHOLDS] = {"10_10",
-					     "15_10",
-					     "15_15",
-					     "20_10",
-					     "20_15",
-					     "20_20"};
+const TString THRESHNAMES[THRESHOLDS] = {"10_10",
+					 "15_10",
+					 "15_15",
+					 "20_10",
+					 "20_15",
+					 "20_20"};
 
 void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
 {
@@ -110,7 +110,7 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
   {
     for(int j = 0; j < 3; ++j)
     {
-      accepted[i][j] = new TH1D(Form("accepted_pt%s_%d",THRESHNAMES[i].c_str(),j),";offline p_{T}",nBins,0,maxPt);
+      accepted[i][j] = new TH1D(Form("accepted_pt%s_%d",THRESHNAMES[i].Data(),j),";offline p_{T}",nBins,0,maxPt);
     }
   }
 
@@ -143,8 +143,8 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
 	{
 	  maxl1pt2 = maxl1pt;
 	  maxl1pt = emcand_hwPt[i];
-	  maxl1eta = physicalEta(emcand_hwEta[i]);
-	  maxl1phi = physicalPhi(emcand_hwPhi[i]);
+	  //maxl1eta = L1EmulatorSimulator::physicalEta(emcand_hwEta[i]);
+	  //maxl1phi = L1EmulatorSimulator::physicalPhi(emcand_hwPhi[i]);
 	} else if (emcand_hwPt[i] > maxl1pt2)
 	{
 	  maxl1pt2 = emcand_hwPt[i];
@@ -355,7 +355,7 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
     {
       a[k][l] = new TGraphAsymmErrors();
       a[k][l]->BayesDivide(accepted[k][l],fPt[l]);
-      a[k][l]->SetName(Form("asymm_pt_%s_%d",THRESHNAMES[k].c_str(),l));
+      a[k][l]->SetName(Form("asymm_pt_%s_%d",THRESHNAMES[k].Data(),l));
     }
   }
 
