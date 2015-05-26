@@ -110,7 +110,7 @@ namespace L1EmulatorSimulator {
     for(unsigned i = 0; i < 22; ++i)
     {
       //puLevelHI[i] = floor(r_puLevelHI[i]/18. + 0.5); // this floating point operation should probably be replaced
-      puLevelHI[i] = puLevelHI[i] * 455 / (1 << 13); // approx equals 1/18
+      puLevelHI[i] = (puLevelHI[i] + 9) * 455 / (1 << 13); // approx equals X/18 +0.5
     }
 
     for(int i = 0; i < 396; ++i){
