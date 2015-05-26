@@ -95,28 +95,22 @@ namespace L1EmulatorSimulator {
 
   void CaloRingBackgroundSubtraction(cand region[396], cand subregion[396])
   {
-    int etaCount[22];
     int puLevelHI[22];
-    float r_puLevelHI[22];
 
     // 22 values of eta
     for(unsigned i = 0; i < 22; ++i)
     {
       puLevelHI[i] = 0;
-      r_puLevelHI[i] = 0.0;
-      etaCount[i] = 0;
     }
 
     for(int i = 0; i < 396; ++i){
-      r_puLevelHI[region[i].eta] += region[i].pt;
-      etaCount[region[i].eta]++;
+      puLevelHI[region[i].eta] += region[i].pt;
     }
 
     for(unsigned i = 0; i < 22; ++i)
     {
-      if(etaCount[i] != 18)
-	std::cout << "ERROR: wrong number of regions in phi ring." << std::endl;
-      puLevelHI[i] = floor(r_puLevelHI[i]/18. + 0.5); // this floating point operation should probably be replaced
+      //puLevelHI[i] = floor(r_puLevelHI[i]/18. + 0.5); // this floating point operation should probably be replaced
+      puLevelHI[i] = puLevelHI[i] * 455 / (1 << 13); // approx equals 1/18
     }
 
     for(int i = 0; i < 396; ++i){
