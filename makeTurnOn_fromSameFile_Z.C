@@ -24,27 +24,30 @@ const int MAXL1EMCANDS = 144;
 const int MAXL1REGIONS = 396;
 const int MAXL1JETS = 8;
 const int MAXPHOTONS = 500;
-const Int_t THRESHOLDS = 6;
-const Int_t MAXGEN = 200000;
+const int MAXGEN = 2000;
 
-const TString THRESHNAMES[THRESHOLDS] = {"10_10",
-					 "15_10",
-					 "15_15",
-					 "20_10",
-					 "20_15",
-					 "20_20"};
+// const TString THRESHNAMES[THRESHOLDS] = {"18_5",
+// 					 "15_5",
+// 					 "8_8",
+// 					 "10_10",
+// 					 "15_15",
+// 					 "20_20",
+// 					 "21_0"};
 
-void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
+const int THRESHOLDS = 24*24;
+
+void makeTurnOn(TString inHiForestFileName, TString outFileName)
 {
-  const TString inHiForestFileName = "/mnt/hadoop/cms/store/user/richard/L1Emulator/twang-ZEE_5TeV_HiForest_v2/HiForest_54_1_634.root";
-  const TString outFileName = "hist_Zee_Z_emcand.root";
+  //const TString inHiForestFileName = "~/scratch/twang-ZEE_5TeV_HiForest_v2.root";
+  //const TString outFileName = "hist_Zee_Z_emcand.root";
   TFile *outFile = new TFile(outFileName,"RECREATE");
 
   TFile *inFile = TFile::Open(inHiForestFileName);
-  TTree *f1Tree = (TTree*)inFile->Get("HiGenParticleAna/hi");
+  //TTree *f1Tree = (TTree*)inFile->Get("HiGenParticleAna/hi");
   TTree *fEvtTree = (TTree*)inFile->Get("hiEvtAnalyzer/HiTree");
   TTree *fSkimTree = (TTree*)inFile->Get("skimanalysis/HltTree");
   TTree *l1Tree = (TTree*)inFile->Get("L1UpgradeAnalyzer/L1UpgradeTree");
+  //TTree *phoTree = (TTree*)inFile->Get("multiPhotonAnalyzer/photon");
 
   Int_t l1_event, l1_run, l1_lumi;
   Int_t l1_hwPt[MAXL1JETS], l1_hwEta[MAXL1JETS], l1_hwPhi[MAXL1JETS];
@@ -81,20 +84,56 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
   fSkimTree->SetBranchAddress("pcollisionEventSelection",&pcollisionEventSelection);
   fSkimTree->SetBranchAddress("pHBHENoiseFilter",&pHBHENoiseFilter);
 
-  Int_t mult;
-  Float_t pt[MAXGEN], eta[MAXGEN], phi[MAXGEN];
-  Int_t pdg[MAXGEN], sta[MAXGEN];
-  Int_t nDaughters[MAXGEN];
-  Int_t daughterIDx[MAXGEN][200];
+  // Int_t mult;
+  // Float_t pt[MAXGEN], eta[MAXGEN], phi[MAXGEN];
+  // Int_t pdg[MAXGEN], sta[MAXGEN];
+  // Int_t nDaughters[MAXGEN];
+  // Int_t daughterIdx[MAXGEN][200];
 
-  f1Tree->SetBranchAddress("mult",&mult);
-  f1Tree->SetBranchAddress("pt",pt);
-  f1Tree->SetBranchAddress("eta",eta);
-  f1Tree->SetBranchAddress("phi",phi);
-  f1Tree->SetBranchAddress("pdg",pdg);
-  f1Tree->SetBranchAddress("sta",sta);
-  f1Tree->SetBranchAddress("nDaughters",nDaughters);
-  f1Tree->SetBranchAddress("daughterIDx",daughterIDx);
+  // f1Tree->SetBranchAddress("mult",&mult);
+  // f1Tree->SetBranchAddress("pt",pt);
+  // f1Tree->SetBranchAddress("eta",eta);
+  // f1Tree->SetBranchAddress("phi",phi);
+  // f1Tree->SetBranchAddress("pdg",pdg);
+  // f1Tree->SetBranchAddress("sta",sta);
+  // f1Tree->SetBranchAddress("nDaughters",nDaughters);
+  // f1Tree->SetBranchAddress("daughterIdx",daughterIdx);
+
+  // Int_t nPhoton;
+  // Float_t photon_pt[MAXPHOTONS];
+  // Float_t photon_eta[MAXPHOTONS];
+  // Float_t photon_phi[MAXPHOTONS];
+  // Float_t cc4[MAXPHOTONS];
+  // Float_t cr4[MAXPHOTONS];
+  // Float_t ct4PtCut20[MAXPHOTONS];
+  // Float_t trkSumPtHollowConeDR04[MAXPHOTONS];
+  // Float_t hcalTowerSumEtConeDR04[MAXPHOTONS];
+  // Float_t ecalRecHitSumEtConeDR04[MAXPHOTONS];
+  // Float_t hadronicOverEm[MAXPHOTONS];
+  // Float_t sigmaIetaIeta[MAXPHOTONS];
+  // Int_t isEle[MAXPHOTONS];
+  // Float_t sigmaIphiIphi[MAXPHOTONS];
+  // Float_t swissCrx[MAXPHOTONS];
+  // Float_t seedTime[MAXPHOTONS];
+
+  // phoTree->SetBranchAddress("nPhotons",&nPhoton);
+  // phoTree->SetBranchAddress("pt",photon_pt);
+  // phoTree->SetBranchAddress("eta",photon_eta);
+  // phoTree->SetBranchAddress("phi",photon_phi);
+
+  // phoTree->SetBranchAddress("cc4",cc4);
+  // phoTree->SetBranchAddress("cr4",cr4);
+  // phoTree->SetBranchAddress("ct4PtCut20",ct4PtCut20);
+  // phoTree->SetBranchAddress("trkSumPtHollowConeDR04",trkSumPtHollowConeDR04);
+  // phoTree->SetBranchAddress("hcalTowerSumEtConeDR04",hcalTowerSumEtConeDR04);
+  // phoTree->SetBranchAddress("ecalRecHitSumEtConeDR04",ecalRecHitSumEtConeDR04);
+  // phoTree->SetBranchAddress("hadronicOverEm",hadronicOverEm);
+  // phoTree->SetBranchAddress("sigmaIetaIeta",sigmaIetaIeta);
+  // phoTree->SetBranchAddress("isEle",isEle);
+  // phoTree->SetBranchAddress("sigmaIphiIphi",sigmaIphiIphi);
+  // phoTree->SetBranchAddress("swissCrx",swissCrx);
+  // phoTree->SetBranchAddress("seedTime",seedTime);
+
 
   const int nBins = 100;
   const int maxPt = 100;
@@ -104,20 +143,25 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
   fPt[0] = new TH1D("fPt_0",";offline p_{T} (GeV)",nBins,0,maxPt);
   fPt[1] = (TH1D*)fPt[0]->Clone("fPt_1");
   fPt[2] = (TH1D*)fPt[0]->Clone("fPt_2");
+  int totalCounts[3] = {0, 0, 0};
+  int passCounts[THRESHOLDS] = {0};
   TH1D *accepted[THRESHOLDS][3];
 
   for(int i = 0; i < THRESHOLDS; ++i)
   {
+    passCounts[i] = 0;
     for(int j = 0; j < 3; ++j)
     {
-      accepted[i][j] = new TH1D(Form("accepted_pt%s_%d",THRESHNAMES[i].Data(),j),";offline p_{T}",nBins,0,maxPt);
+      int thresh1 = i/24;
+      int thresh2 = i%24;
+      accepted[i][j] = new TH1D(Form("accepted_pt%d_%d_%d",thresh1,thresh2,j),";offline p_{T}",nBins,0,maxPt);
     }
   }
 
   TH2D *corr = new TH2D("corr",";offline p_{T};l1 p_{T}",nBins,0,maxPt,nBins,0,maxPt);
   TH2D *deltaMap = new TH2D("deltamap",";#Delta #eta;#Delta #phi",100, 0, 10, 100, 0, 3.15);
 
-  Long64_t entries = f1Tree->GetEntries();
+  Long64_t entries = fEvtTree->GetEntries();
   for(Long64_t j = 0; j < entries; ++j)
   {
     if(j % 10000 == 0)
@@ -127,236 +171,96 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
     fSkimTree->GetEntry(j);
 
     l1Tree->GetEntry(j);
-    f1Tree->GetEntry(j);
+    //f1Tree->GetEntry(j);
+    //phoTree->GetEntry(j);
 
     double maxl1pt = 0;
     double maxl1pt2 = 0;
     double maxl1eta = -10;
     double maxl1phi = -10;
-    // switch(seed){
-    // case emcands:
-    // {
-      for(int i = 0; i < MAXL1EMCANDS; ++i)
+
+    for(int i = 0; i < MAXL1EMCANDS; ++i)
+    {
+      //if(emcand_hwEta[i] < 7 || emcand_hwEta[i] > 14) continue;
+      if(emcand_hwPt[i] > maxl1pt)
       {
-	//if(emcand_hwEta[i] < 7 || emcand_hwEta[i] > 14) continue;
-	if(emcand_hwPt[i] > maxl1pt)
-	{
-	  maxl1pt2 = maxl1pt;
-	  maxl1pt = emcand_hwPt[i];
-	  //maxl1eta = L1EmulatorSimulator::physicalEta(emcand_hwEta[i]);
-	  //maxl1phi = L1EmulatorSimulator::physicalPhi(emcand_hwPhi[i]);
-	} else if (emcand_hwPt[i] > maxl1pt2)
-	{
-	  maxl1pt2 = emcand_hwPt[i];
-	}
+	maxl1pt2 = maxl1pt;
+	maxl1pt = emcand_hwPt[i];
+	//maxl1eta = L1EmulatorSimulator::physicalEta(emcand_hwEta[i]);
+	//maxl1phi = L1EmulatorSimulator::physicalPhi(emcand_hwPhi[i]);
+      } else if (emcand_hwPt[i] > maxl1pt2)
+      {
+	maxl1pt2 = emcand_hwPt[i];
       }
-    // }
-    // break;
-    // case regions:
-    // {
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	if(region_hwPt[i] * 0.5 > maxl1pt)
-    // 	{
-    // 	  if(region_hwEta[i] < 6 || region_hwEta[i] > 15) continue;
-    // 	  maxl1pt = region_hwPt[i] * 0.5;
-    // 	  maxl1eta = physicalEta(region_hwEta[i]);
-    // 	  maxl1phi = physicalPhi(region_hwPhi[i]);
-    // 	}
-    //   }
-    // }
-    // break;
-    // case subRegions:
-    // {
-    //   L1EmulatorSimulator::cand regions[396];
-    //   L1EmulatorSimulator::cand subregions[396];
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	regions[i].pt = region_hwPt[i];
-    // 	regions[i].eta = region_hwEta[i];
-    // 	regions[i].phi = region_hwPhi[i];
-    //   }
-    //   L1EmulatorSimulator::CaloRingBackgroundSubtraction(regions, subregions);
-
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	if(subregions[i].eta < 6 || subregions[i].eta > 15) continue;
-    // 	if(subregions[i].pt*0.5 > maxl1pt)
-    // 	{
-    // 	  maxl1pt = subregions[i].pt * 0.5;
-    // 	  maxl1eta = physicalEta(subregions[i].eta);
-    // 	  maxl1phi = physicalPhi(subregions[i].phi);
-    // 	}
-    //   }
-    // }
-    // break;
-    // case twoByTwoJets:
-    // {
-    //   L1EmulatorSimulator::cand regions[396];
-    //   L1EmulatorSimulator::cand subregions[396];
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	regions[i].pt = region_hwPt[i];
-    // 	regions[i].eta = region_hwEta[i];
-    // 	regions[i].phi = region_hwPhi[i];
-    //   }
-    //   L1EmulatorSimulator::CaloRingBackgroundSubtraction(regions, subregions);
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	if(subregions[i].eta < 6 || subregions[i].eta > 15)
-    // 	  subregions[i].pt = 0;
-    //   }
-    //   L1EmulatorSimulator::cand jets[8];
-    //   L1EmulatorSimulator::TwoByTwoFinder(subregions, jets);
-
-    //   for(int i = 0; i < MAXL1JETS; ++i)
-    //   {
-    // 	if(jets[i].pt*4 > maxl1pt)
-    // 	{
-    // 	  maxl1pt = jets[i].pt * 4;
-    // 	  maxl1eta = physicalEta(jets[i].eta);
-    // 	  maxl1phi = physicalPhi(jets[i].phi);
-    // 	}
-    //   }
-    // }
-    // break;
-    // case threeByThreeJets:
-    // {
-    //   L1EmulatorSimulator::cand regions[396];
-    //   L1EmulatorSimulator::cand subregions[396];
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	regions[i].pt = region_hwPt[i];
-    // 	regions[i].eta = region_hwEta[i];
-    // 	regions[i].phi = region_hwPhi[i];
-    //   }
-    //   L1EmulatorSimulator::CaloRingBackgroundSubtraction(regions, subregions);
-    //   for(int i = 0; i < MAXL1REGIONS; ++i)
-    //   {
-    // 	if(subregions[i].eta < 6 || subregions[i].eta > 15)
-    // 	  subregions[i].pt = 0;
-    //   }
-    //   L1EmulatorSimulator::cand jets[8];
-    //   L1EmulatorSimulator::SlidingWindowJetFinder(subregions, jets);
-
-    //   for(int i = 0; i < MAXL1JETS; ++i)
-    //   {
-    // 	if(jets[i].pt*4 > maxl1pt)
-    // 	{
-    // 	  maxl1pt = jets[i].pt * 4;
-    // 	  maxl1eta = physicalEta(jets[i].eta);
-    // 	  maxl1phi = physicalPhi(jets[i].phi);
-    // 	}
-    //   }
-    // }
-    // break;
-    // default:
-    //   std::cout << "Invalid seed type specified." << std::endl;
-    //   return;
-    // }
+    }
 
     double maxfpt = 0;
     double maxfeta = -10;
     double maxfphi = -10;
-    for(int i = 0; i < mult; ++i)
-    {
-      if(pdg[i] != 23) continue;
-      if(abs(pdg[daughterIDx[i][0]]) != 11) continue;
-      if(pt[i] > maxfpt)
-      {
-	maxfpt = pt[i];
-	maxfeta = eta[i];
-	maxfphi = phi[i];
-      }
-    }
+    // for(int i = 0; i < mult; ++i)
+    // {
+    //   if(pdg[i] != 23) continue;
+    //   //if(abs(pdg[daughterIdx[i][0]]) != 11) continue; // sta=2 Zs have 0 daughters?
+    //   if(sta[i] != 2) continue; // there are sta=3 Zs
+    //   if(pt[i] > maxfpt)
+    //   {
+    // 	maxfpt = pt[i];
+    // 	maxfeta = eta[i];
+    // 	maxfphi = phi[i];
+    //   }
+    // }
     l1Pt->Fill(maxl1pt);
+    totalCounts[0]++;
 
-    bool goodEvent = false;
-    if((pcollisionEventSelection == 1) && (TMath::Abs(vz) < 15))
-    {
-      goodEvent = true;
-    }
-    if(!goodEvent) continue;
+    // bool goodEvent = false;
+    // if((pcollisionEventSelection == 1) && (TMath::Abs(vz) < 15))
+    // {
+    //   goodEvent = true;
+    // }
+    // if(!goodEvent) continue;
 
     fPt[0]->Fill(maxfpt);
-    if(hiBin < 60)
+    if(hiBin < 60){
       fPt[1]->Fill(maxfpt);
-    else if (hiBin >= 100)
+      totalCounts[1]++;
+    }
+    else if (hiBin >= 100){
       fPt[2]->Fill(maxfpt);
+      totalCounts[2]++;
+    }
 
     corr->Fill(maxfpt,maxl1pt);
     deltaMap->Fill(TMath::Abs(maxl1eta-maxfeta), TMath::ACos(TMath::Cos(maxl1phi - maxfphi)));
 
-    // for(int i = 0; i < THRESHOLDS; ++i)
-    // {
-    //   if(maxl1pt >= i)
-    //   {
-    // 	accepted[i][0]->Fill(maxfpt);
-    // 	if(hiBin < 60)
-    // 	  accepted[i][1]->Fill(maxfpt);
-    // 	else if (hiBin >= 100)
-    // 	  accepted[i][2]->Fill(maxfpt);
-    //   }
-    // }
-    if(maxl1pt >= 10 && maxl1pt2 >= 10)
+    for(int i = 0; i < THRESHOLDS; i++)
     {
-      accepted[0][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[0][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[0][2]->Fill(maxfpt);
+      int thresh1 = i/24;
+      int thresh2 = i%24;
+      if(thresh2 > thresh1) continue;
+      if(maxl1pt >= thresh1 && maxl1pt2 >= thresh2)
+      {
+	accepted[i][0]->Fill(maxfpt);
+	passCounts[i]++;
+	if(hiBin < 60)
+	  accepted[i][1]->Fill(maxfpt);
+	else if (hiBin >= 100)
+	  accepted[i][2]->Fill(maxfpt);
+      }
     }
-    if(maxl1pt >= 15 && maxl1pt2 >= 10)
-    {
-      accepted[1][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[1][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[2][2]->Fill(maxfpt);
-    }
-    if(maxl1pt >= 15 && maxl1pt2 >= 15)
-    {
-      accepted[2][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[2][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[2][2]->Fill(maxfpt);
-    }
-    if(maxl1pt >= 20 && maxl1pt2 >= 10)
-    {
-      accepted[3][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[3][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[3][2]->Fill(maxfpt);
-    }
-    if(maxl1pt >= 20 && maxl1pt2 >= 15)
-    {
-      accepted[4][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[4][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[4][2]->Fill(maxfpt);
-    }
-    if(maxl1pt >= 20 && maxl1pt2 >= 20)
-    {
-      accepted[5][0]->Fill(maxfpt);
-      if(hiBin < 60)
-	accepted[5][1]->Fill(maxfpt);
-      else if (hiBin >= 100)
-	accepted[5][2]->Fill(maxfpt);
-    }
-
   }
 
   TGraphAsymmErrors *a[THRESHOLDS][3];
   for(int k = 0; k < THRESHOLDS; ++k){
+    int thresh1 = k/24;
+    int thresh2 = k%24;
+    if(thresh2 > thresh1) continue;
     for(int l = 0; l < 3; ++l)
     {
       a[k][l] = new TGraphAsymmErrors();
       a[k][l]->BayesDivide(accepted[k][l],fPt[l]);
-      a[k][l]->SetName(Form("asymm_pt_%s_%d",THRESHNAMES[k].Data(),l));
+      a[k][l]->SetName(Form("asymm_pt_%d_%d_%d",thresh1,thresh2,l));
     }
+    std::cout << thresh1 << "_" << thresh2 << " " << (double)passCounts[k]/(double)totalCounts[0] * 100 << std::endl;
   }
 
   outFile->cd();
@@ -368,6 +272,9 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
   corr->Write();
   deltaMap->Write();
   for(int k = 0; k < THRESHOLDS; ++k){
+    int thresh1 = k/24;
+    int thresh2 = k%24;
+    if(thresh2 > thresh1) continue;
     for(int l = 0; l < 3; ++l)
     {
       accepted[k][l]->Write();
@@ -378,16 +285,16 @@ void makeTurnOn(/*TString inHiForestFileName, TString outFileName*/)
   outFile->Close();
 }
 
-int main(/*int argc, char **argv*/)
+int main(int argc, char **argv)
 {
-  // if(argc == 3)
-  // {
-  //   makeTurnOn(argv[1], argv[2]);
-  //   return 0;
-  // }
-  // else
-  // {
-    makeTurnOn();
+  if(argc == 3)
+  {
+    makeTurnOn(argv[1], argv[2]);
     return 0;
-    //}
+  }
+  else
+  {
+    //makeTurnOn();
+    return 0;
+  }
 }

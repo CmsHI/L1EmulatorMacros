@@ -146,7 +146,7 @@ void makeTurnOn(TString inHiForestFileName, TString outFileName, seedObject seed
     {
       for(int i = 0; i < MAXL1EMCANDS; ++i)
       {
-	if(emcand_hwEta[i] < 7 || emcand_hwEta[i] > 14) continue;
+	//if(emcand_hwEta[i] < 7 || emcand_hwEta[i] > 14) continue;
 	if(emcand_hwPt[i] > maxl1pt)
 	{
 	  maxl1pt = emcand_hwPt[i];
